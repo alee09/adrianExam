@@ -35,7 +35,8 @@ pipeline {
                 expression { params.RUN }
             }
             steps {
-                sh "sudo ci/scripts/deliver.sh"
+                sh 'chmod +x ./ci/scripts/deliver.sh'
+                sh './ci/scripts/deliver.sh'
             }
         }
         stage('Build Results'){
