@@ -1,0 +1,50 @@
+// Adrian Lee
+// 4/13/2022
+// this pipeline builds, checks the number of lines in the java file, runs automated tests, and prints a result when completed
+pipeline {
+    agent any
+    parameters { 
+        booleanParam(defaultValue: false, description: 'Whether to Run the Code', name: 'RUN')  
+        string(name:'BUILD_NAME', defaultValue: "Latest", description: "Name of the build." )
+               }
+    stages {
+        stage('Build') {
+            steps { 
+                echo "Starting Build"
+                sh "mvn -B -DskipTests clean install" 
+                echo "Build Complete"
+            } 
+        }
+        stage('Code Quantity') {
+            steps {
+                sh "wc -l src/main/java/com/mycompany/app/App.java"
+            }
+        }
+        stage('Test') {
+                steps {
+                    sh 'mvn test'
+                }
+                post {
+                    always {
+                        junit 'target/surefire-reports/*.xml'
+                    }
+                }
+            }
+        stage('Run') {
+            when {
+                expression { params.RUN }
+            }
+            steps {
+                sh "ci/scripts/deliver.sh"
+            }
+        }
+        stage('Build Results'){
+            steps{
+                echo "Build $BUILD_NAME completed succesfully"
+                echo "I have now completed ACIT 4850!"
+                echo "Student Number: A01235958, Group:3"
+            }
+        }
+
+    }
+}
