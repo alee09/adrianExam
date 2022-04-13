@@ -4,7 +4,7 @@
 pipeline {
     agent any
     parameters { 
-        booleanParam(defaultValue: false, description: 'Whether to Run the Code', name: 'RUN')  
+        booleanParam(defaultValue: true, description: 'Whether to Run the Code', name: 'RUN')  
         string(name:'BUILD_NAME', defaultValue: "Latest", description: "Name of the build." )
                }
     stages {
@@ -40,7 +40,7 @@ pipeline {
         }
         stage('Build Results'){
             steps{
-                echo "Build $BUILD_NAME completed succesfully"
+                echo "Build $params.BUILD_NAME completed succesfully"
                 echo "I have now completed ACIT 4850!"
                 echo "Student Number: A01235958, Group:3"
             }
